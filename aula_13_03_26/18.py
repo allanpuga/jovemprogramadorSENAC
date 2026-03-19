@@ -1,0 +1,1 @@
+# Leia valor (float). Faça: += 5, depois /= 2, depois **= 2.
