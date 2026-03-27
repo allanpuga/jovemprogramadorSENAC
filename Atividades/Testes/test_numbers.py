@@ -4,7 +4,9 @@
 # A função deve retornar "Positive" se o number de entrada for positivo (maior que 0), "Negative" se for negativo (menor que 0) e "Zero" se for igual a 0.
 # A função não deve modificar o number de entrada.
 
+
 print("Atividade 4: Obter o sinal do número")
+number = int(input("Digite um número inteiro: "))
 def get_sign(number):
     if number > 0:
         return "Positive"
@@ -13,7 +15,7 @@ def get_sign(number):
     else:
         return "Zero"
 # Testando a função com diferentes números
-test_numbers = [10, -5, 0]
+test_numbers = [number, 10, -5, 0]
 for num in test_numbers:
     print(f"O sinal de {num} é: {get_sign(num)}")
     

@@ -6,6 +6,10 @@
 # A função não deve modificar os números de entrada.
 
 print("Atividade 5: Máximo de três números")
+a = int(input("Digite o primeiro número (a): "))
+b = int(input("Digite o segundo número (b): "))
+c = int(input("Digite o terceiro número (c): "))
+
 def max_of_three(a, b, c):
     if a >= b and a >= c:
         return a
@@ -13,8 +17,9 @@ def max_of_three(a, b, c):
         return b
     else:
         return c
+
 # Testando a função com diferentes conjuntos de números
-test_cases = [(3, 5, 2), (10, 7, 15), (-1, -5, -3), (0, 0, 0)]
+test_cases = [(a, b, c), (3, 5, 2), (10, 7, 15), (-1, -5, -3), (0, 0, 0)]
 for a, b, c in test_cases:
     print(f"O máximo de {a}, {b} e {c} é: {max_of_three(a, b, c)}") 
 

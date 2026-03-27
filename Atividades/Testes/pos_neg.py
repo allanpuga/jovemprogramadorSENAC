@@ -7,6 +7,7 @@
 # Complete a função garantindo que ela retorne 'True' para números maiores que 0 e 'False' nos outros casos.
 
 print("Atividade 3: Verificar se o número é positivo")
+number = int(input("Digite um número inteiro: "))
 def is_positive(number):
     if number > 0:
         return True

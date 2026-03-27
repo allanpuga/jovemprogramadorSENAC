@@ -38,3 +38,24 @@ print(f"Salário máximo: {max_salario:.2f}")
 print(f"Salário médio: {media_salario:.2f}")
 print(f"Mediana dos salários: {mediana_salario:.2f}")
 print(f"Desvio padrão dos salários: {desvio_padrao_salario:.2f}")
+
+# Ordenação
+# Ordene o Dataframe em ordem alfabética considerando a coluna de nomes, em caso de empate, considere o maior salário.
+data_ordenada = sorted(data, key=lambda x: (x["nome"], -x["salario"]))
+print("DataFrame ordenado por nome e salário:")
+for item in data_ordenada:
+    print(item)
+
+# Deduplicação
+# Considere deduplicar os dados repetido por nome considerando o maior salário. Isto é, caso o nome se repita, remova as linhas com menor salário para o mesmo nome.
+data_deduplicada = {}
+for item in data:
+    nome = item["nome"]
+    salario = item["salario"]
+    if nome not in data_deduplicada or salario > data_deduplicada[nome]["salario"]:
+        data_deduplicada[nome] = item
+
+print("DataFrame deduplicado:")
+for item in data_deduplicada.values():
+    print(item)
+

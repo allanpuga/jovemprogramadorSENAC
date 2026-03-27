@@ -99,3 +99,4 @@ for x in carrinho:
 print(f'\nTotal a pagar: {total:.2f}')    
 
 print('Catalogo: ', sorted(catalogo, key=lambda x: x[2]))
+
