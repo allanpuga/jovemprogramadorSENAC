@@ -1,20 +1,27 @@
 <div id="calculadora-movinmapp" style="max-width: 450px; margin: 20px auto; background: #fff; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-family: 'Segoe UI', Roboto, sans-serif; overflow: hidden; border: 1px solid #e0e0e0;">
     
     <div style="display: flex; background: #f8f9fa; border-bottom: 1px solid #eee;">
-        <button id="btn-corrida" onclick="alternarCalculadora('corrida')" style="flex: 1; padding: 15px; border: none; background: #fff; cursor: pointer; font-weight: bold; color: #0073aa; border-bottom: 3px solid #0073aa; transition: 0.3s;">Por Corrida Única</button>
-        <button id="btn-faturamento" onclick="alternarCalculadora('faturamento')" style="flex: 1; padding: 15px; border: none; background: #f8f9fa; cursor: pointer; font-weight: bold; color: #666; border-bottom: 3px solid transparent; transition: 0.3s;">Por Faturamento</button>
+        <button id="btn-corrida" onclick="alternarCalculadora('corrida')" style="flex: 1; padding: 10px 5px; border: none; background: #fff; cursor: pointer; font-weight: bold; color: #0073aa; border-bottom: 3px solid #0073aa; transition: 0.3s; font-size: 13px;">Valor Total</button>
+        <button id="btn-ganho" onclick="alternarCalculadora('ganho')" style="flex: 1; padding: 10px 5px; border: none; background: #f8f9fa; cursor: pointer; font-weight: bold; color: #666; border-bottom: 3px solid transparent; transition: 0.3s; font-size: 13px;">Ganho Corrida</button>
+        <button id="btn-faturamento" onclick="alternarCalculadora('faturamento')" style="flex: 1; padding: 10px 5px; border: none; background: #f8f9fa; cursor: pointer; font-weight: bold; color: #666; border-bottom: 3px solid transparent; transition: 0.3s; font-size: 13px;">Faturamento</button>
     </div>
 
     <div style="padding: 25px;">
         
         <div id="sessao-corrida">
-            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #444;">Valor Total da Corrida (Bruto):</label>
+            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #444;">Valor Total Pago pelo Passageiro:</label>
             <input type="number" id="input_corrida" placeholder="R$ 0,00" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 20px; font-size: 16px; box-sizing: border-box;">
             <button onclick="calcularCorrida()" style="width: 100%; padding: 14px; background: #0073aa; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;">Calcular INSS</button>
         </div>
 
+        <div id="sessao-ganho" style="display: none;">
+            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #444;">Valor Líquido da Corrida (Sem Plataforma):</label>
+            <input type="number" id="input_ganho" placeholder="R$ 0,00" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 20px; font-size: 16px; box-sizing: border-box;">
+            <button onclick="calcularGanhoCorrida()" style="width: 100%; padding: 14px; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;">Calcular INSS</button>
+        </div>
+
         <div id="sessao-faturamento" style="display: none;">
-            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #444;">Faturamento Líquido (Já sem plataforma):</label>
+            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #444;">Faturamento Total Recebido:</label>
             <input type="number" id="input_faturamento" placeholder="R$ 0,00" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 20px; font-size: 16px; box-sizing: border-box;">
             <button onclick="calcularFaturamento()" style="width: 100%; padding: 14px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;">Calcular Ganhos</button>
         </div>
@@ -22,17 +29,17 @@
         <div id="quadro-resultado" style="margin-top: 25px; display: none; background: #fdfdfd; padding: 15px; border-radius: 10px; border: 1px solid #eee;">
             
             <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <span style="color: #666;">Contribuição INSS (7.5%):</span>
+                <span id="txt_inss" style="color: #666; font-size: 14px; max-width: 70%;">Contribuição INSS:</span>
                 <span id="res_inss" style="font-weight: bold; color: #d9534f;"></span>
             </div>
             
             <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <span style="color: #666;">Ganho Líquido do Motorista:</span>
+                <span id="txt_motorista" style="color: #666; font-size: 14px; max-width: 70%;">Ganho Líquido:</span>
                 <span id="res_motorista" style="font-weight: bold; color: #28a745; font-size: 1.1em;"></span>
             </div>
             
-            <div style="display: flex; justify-content: space-between; border-top: 1px solid #eee; padding-top: 10px; margin-top: 10px;">
-                <span style="color: #999; font-size: 13px;">Parte da Plataforma (Est. 30%):</span>
+            <div id="linha_plataforma" style="display: flex; justify-content: space-between; border-top: 1px solid #eee; padding-top: 10px; margin-top: 10px;">
+                <span id="txt_plataforma" style="color: #999; font-size: 13px;">Parte da Plataforma:</span>
                 <span id="res_plataforma" style="color: #999; font-size: 13px;"></span>
             </div>
 
@@ -44,63 +51,96 @@
     const money = (v) => v.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
 
     function alternarCalculadora(tipo) {
-        const sCorrida = document.getElementById('sessao-corrida');
-        const sFaturamento = document.getElementById('sessao-faturamento');
-        const bCorrida = document.getElementById('btn-corrida');
-        const bFaturamento = document.getElementById('btn-faturamento');
+        const abas = ['corrida', 'ganho', 'faturamento'];
+        const cores = { corrida: '#0073aa', ganho: '#6c757d', faturamento: '#28a745' };
+        
         const quadro = document.getElementById('quadro-resultado');
-
         quadro.style.display = 'none'; 
 
-        if (tipo === 'corrida') {
-            sCorrida.style.display = 'block';
-            sFaturamento.style.display = 'none';
-            bCorrida.style.borderBottomColor = '#0073aa';
-            bCorrida.style.background = '#fff';
-            bCorrida.style.color = '#0073aa';
-            bFaturamento.style.borderBottomColor = 'transparent';
-            bFaturamento.style.background = '#f8f9fa';
-            bFaturamento.style.color = '#666';
-        } else {
-            sCorrida.style.display = 'none';
-            sFaturamento.style.display = 'block';
-            bFaturamento.style.borderBottomColor = '#28a745';
-            bFaturamento.style.background = '#fff';
-            bFaturamento.style.color = '#28a745';
-            bCorrida.style.borderBottomColor = 'transparent';
-            bCorrida.style.background = '#f8f9fa';
-            bCorrida.style.color = '#666';
-        }
+        abas.forEach(aba => {
+            const sessao = document.getElementById('sessao-' + aba);
+            const botao = document.getElementById('btn-' + aba);
+            
+            if (tipo === aba) {
+                sessao.style.display = 'block';
+                botao.style.borderBottomColor = cores[aba];
+                botao.style.background = '#fff';
+                botao.style.color = cores[aba];
+            } else {
+                sessao.style.display = 'none';
+                botao.style.borderBottomColor = 'transparent';
+                botao.style.background = '#f8f9fa';
+                botao.style.color = '#666';
+            }
+        });
     }
 
+    // ABA 1: VALOR TOTAL PASSAGEIRO
     function calcularCorrida() {
         let valor = parseFloat(document.getElementById('input_corrida').value);
-        if(!valor) return alert("Insira o valor da corrida");
+        if(!valor) return alert("Insira o valor");
 
         let plataforma = valor * 0.30;
         let restante = valor - plataforma;
-        // Sua regra original: 25% do valor líquido incide 7.5% de INSS
         let inss = (restante * 0.25) * 0.075; 
         
-        exibir(inss, (restante - inss), plataforma);
+        exibir(
+            inss, 
+            (restante - inss), 
+            plataforma,
+            "Contribuição INSS (7.5% de 25% do líquido):",
+            "Ganho Líquido (Menos taxa e INSS):",
+            "Parte da Plataforma (Est. 30%):"
+        );
     }
 
+    // ABA 2: VALOR GANHO NA CORRIDA (MESMA LÓGICA DO SEU ÚLTIMO CÓDIGO)
+    function calcularGanhoCorrida() {
+        let valor = parseFloat(document.getElementById('input_ganho').value);
+        if(!valor) return alert("Insira o valor");
+
+        let inss = valor * 0.25 * 0.075;
+        let plataforma = (valor / 0.70) - valor;
+
+        exibir(
+            inss,
+            (valor - inss),
+            plataforma,
+            "INSS sobre esta corrida (Base 25%):",
+            "O que sobra no seu bolso:",
+            "Taxa aproximada paga à plataforma:"
+        );
+    }
+
+    // ABA 3: FATURAMENTO ACUMULADO
     function calcularFaturamento() {
         let faturamento = parseFloat(document.getElementById('input_faturamento').value);
-        if(!faturamento) return alert("Insira o faturamento líquido");
+        if(!faturamento) return alert("Insira o faturamento");
 
-        // Sua regra original para faturamento direto
-        let inss = faturamento * 0.075;
-        // Cálculo do lucro da plataforma baseado nos 70%
+        let inss = faturamento * 0.25 * 0.075;
         let plataforma = (faturamento / 0.70) - faturamento;
         
-        exibir(inss, (faturamento - inss), plataforma);
+        exibir(
+            inss, 
+            (faturamento - inss), 
+            plataforma,
+            "Total de INSS a pagar sobre o faturamento:",
+            "Seu lucro real final:",
+            "Lucro total da plataforma no período:"
+        );
     }
 
-    function exibir(inss, motorista, plataforma) {
+    function exibir(inss, motorista, plataforma, txtInss, txtMotorista, txtPlat) {
+        // Atualiza os textos
+        document.getElementById('txt_inss').innerText = txtInss;
+        document.getElementById('txt_motorista').innerText = txtMotorista;
+        document.getElementById('txt_plataforma').innerText = txtPlat;
+        
+        // Atualiza os valores
         document.getElementById('res_inss').innerText = money(inss);
         document.getElementById('res_motorista').innerText = money(motorista);
         document.getElementById('res_plataforma').innerText = money(plataforma);
+        
         document.getElementById('quadro-resultado').style.display = 'block';
     }
 </script>
