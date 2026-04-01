@@ -4,7 +4,8 @@ total_compras = 0
 quantidade_compras = 0
 
 while True:
-    valor_compra = float(input("Informe o valor da compra (ou 0 para sair): R$ "))
+    
+    valor_compra = float(input(f"Informe o valor da compra {quantidade_compras + 1}° (ou 0 para sair): R$ "))
     if valor_compra == 0:
         break
     total_compras += valor_compra
