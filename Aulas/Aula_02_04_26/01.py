@@ -2,5 +2,5 @@
 
 def bem_vindo(nome):
     print(f'Bem-vindo, {nome}')
-nome = input("Digite seu nome: ")
-bem_vindo(nome) 
+    nome = input("Digite seu nome: ")
+    return nome
