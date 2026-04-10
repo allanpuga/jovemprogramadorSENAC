@@ -16,7 +16,7 @@ print("Valor para o motorista - INSS: R$ {:.2f}".format(restante - inss))
 # Diga quanto a plataforma lucrou considerando o faturamento e que ela fica com 30% do valor total.
 
 faturamento = float(input("Digite o valor do faturamento sem o valor da plataforma: R$ "))
-inss_faturamento = faturamento * 0.075
+inss_faturamento = faturamento * 0.25 * 0.075
 print("O valor a ser pago de INSS sobre o faturamento é: R$ {:.2f}".format(inss_faturamento))
 print("Valor para o motorista: R$ {:.2f}".format(faturamento - inss_faturamento))
 print("Lucro da plataforma: R$ {:.2f}".format((faturamento // 0.70) - faturamento))
